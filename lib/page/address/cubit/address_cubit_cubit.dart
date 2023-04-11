@@ -40,6 +40,11 @@ class AddressCubitCubit extends Cubit<AddressCubitState> {
     });
   }
 
+  updateStatusDataToLocal(List<AddressModels> value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('action', jsonEncode(value));
+  }
+
   updateDataToLocal(List<AddressModels> value) async {
     emit(LocalDataLoading());
     final prefs = await SharedPreferences.getInstance();

@@ -256,7 +256,7 @@ class _HomePageBlocState extends State<HomePageBloc> {
                                                     context
                                                         .read<
                                                             AddressCubitCubit>()
-                                                        .updateDataToLocal(
+                                                        .updateStatusDataToLocal(
                                                             state.listData);
                                                   });
                                                 },
@@ -284,7 +284,7 @@ class _HomePageBlocState extends State<HomePageBloc> {
                                                     context
                                                         .read<
                                                             AddressCubitCubit>()
-                                                        .updateDataToLocal(
+                                                        .updateStatusDataToLocal(
                                                             state.listData);
                                                   });
                                                 },

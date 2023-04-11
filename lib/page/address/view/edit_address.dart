@@ -742,7 +742,7 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             child: TextField(
               style: addAddressTextCategory,
               controller: phoneAddressController,
-              maxLength: 2,
+              maxLength: 13,
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
