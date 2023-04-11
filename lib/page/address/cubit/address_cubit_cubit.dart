@@ -23,7 +23,9 @@ class AddressCubitCubit extends Cubit<AddressCubitState> {
       emit(LocalDataSuccess(listData));
     } else {
       listData = addressModelsFromJson(action.toString());
-      emit(LocalDataSuccess(listData));
+      Future.delayed(Duration(milliseconds: 1000), () {
+        emit(LocalDataSuccess(listData));
+      });
     }
   }
 
@@ -33,7 +35,7 @@ class AddressCubitCubit extends Cubit<AddressCubitState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('action', jsonEncode(listData));
     inspect(listData);
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       emit(SuccessAddData());
     });
   }
@@ -42,7 +44,7 @@ class AddressCubitCubit extends Cubit<AddressCubitState> {
     emit(LocalDataLoading());
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('action', jsonEncode(value));
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       emit(SuccessChangeData());
     });
   }
