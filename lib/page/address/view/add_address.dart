@@ -4,6 +4,7 @@ import 'package:address_app/page/address/models/province_models.dart';
 import 'package:address_app/page/home/model/list_models.dart';
 import 'package:address_app/style/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -582,8 +583,15 @@ class _AddAddressPageBlocState extends State<AddAddressPageBloc> {
       child: TextField(
         style: addAddressTextCategory,
         controller: rtAddressController,
+        maxLength: 3,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
         decoration: InputDecoration(
             border: InputBorder.none,
+            counterText: "",
             hintText: 'RT',
             hintStyle: addAddressTextCategory),
       ),
@@ -608,8 +616,15 @@ class _AddAddressPageBlocState extends State<AddAddressPageBloc> {
       child: TextField(
         style: addAddressTextCategory,
         controller: rwAddressController,
+        maxLength: 2,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
         decoration: InputDecoration(
             border: InputBorder.none,
+            counterText: "",
             hintText: 'RW',
             hintStyle: addAddressTextCategory),
       ),
@@ -633,8 +648,15 @@ class _AddAddressPageBlocState extends State<AddAddressPageBloc> {
       child: TextField(
         style: addAddressTextCategory,
         controller: phoneAddressController,
+        maxLength: 13,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
         decoration: InputDecoration(
             border: InputBorder.none,
+            counterText: "",
             hintText: 'Nomor Telepon',
             hintStyle: addAddressTextCategory),
       ),

@@ -33,13 +33,17 @@ class AddressCubitCubit extends Cubit<AddressCubitState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('action', jsonEncode(listData));
     inspect(listData);
-    Future.delayed(Duration(milliseconds: 2000), () {
+    Future.delayed(Duration(milliseconds: 1500), () {
       emit(SuccessAddData());
     });
   }
 
   updateDataToLocal(List<AddressModels> value) async {
+    emit(LocalDataLoading());
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('action', jsonEncode(value));
+    Future.delayed(Duration(milliseconds: 1500), () {
+      emit(SuccessChangeData());
+    });
   }
 }

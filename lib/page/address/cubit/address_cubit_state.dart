@@ -18,3 +18,5 @@ class LocalDataSuccess extends AddressCubitInitial {
 class LocalDataLoading extends AddressCubitInitial {}
 
 class SuccessAddData extends AddressCubitState {}
+
+class SuccessChangeData extends AddressCubitState {}

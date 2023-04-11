@@ -22,7 +22,6 @@ class AddressViewModels {
     try {
       http.Response response =
           await _apiService.getApiData('/api/daerahindonesia/kota', data);
-      inspect(response);
       return response;
     } catch (e) {
       return e;
