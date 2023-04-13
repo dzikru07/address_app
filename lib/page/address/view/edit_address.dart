@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../style/text.dart';
@@ -130,11 +131,11 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
 
     double _width = MediaQuery.of(context).size.width;
 
-    var categoryAddress = listData.isEmpty
+    categoryAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
             margin: EdgeInsets.only(bottom: 10),
-            width: _width,
+            width: _width / sizeWidth,
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -180,11 +181,11 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var countryAddress = listData.isEmpty
+    countryAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
             margin: EdgeInsets.only(bottom: 10),
-            width: _width,
+            width: _width / sizeWidth,
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -230,14 +231,14 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var provinceAddress = listData.isEmpty
+    provinceAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : BlocBuilder<GetDataAddressBloc, GetDataAddressState>(
             builder: (context, state) {
               if (state is GetProviceSuccess) {
                 return Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  width: _width,
+                  width: _width / sizeWidth,
                   padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -310,14 +311,14 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             },
           );
 
-    var cityAddress = listData.isEmpty
+    cityAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : BlocBuilder<GetCityAddressBloc, GetDataAddressState>(
             builder: (context, state) {
               if (state is GetCitySuccess) {
                 return Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  width: _width,
+                  width: _width / sizeWidth,
                   padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -394,174 +395,174 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             },
           );
 
-    var districtAddress = listData.isEmpty ||
-            listData[widget.data.index].cityId == '0'
-        ? SizedBox()
-        : BlocBuilder<GetDistrictAddressBloc, GetDataAddressState>(
-            builder: (context, state) {
-              if (state is GetDistrictSuccess) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: _width,
-                  padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      border: Border.all(width: 0.5, color: Colors.grey),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 5,
-                          blurRadius: 10,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
+    districtAddress(double sizeWidth) =>
+        listData.isEmpty || listData[widget.data.index].cityId == '0'
+            ? SizedBox()
+            : BlocBuilder<GetDistrictAddressBloc, GetDataAddressState>(
+                builder: (context, state) {
+                  if (state is GetDistrictSuccess) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: _width / sizeWidth,
+                      padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          border: Border.all(width: 0.5, color: Colors.grey),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 10,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ]),
+                      child: DropdownButton<String>(
+                        underline: Container(
+                          height: 0,
                         ),
-                      ]),
-                  child: DropdownButton<String>(
-                    underline: Container(
-                      height: 0,
-                    ),
-                    isExpanded: true,
-                    value: districtValue,
-                    hint: Text(
-                      districtValue == null
-                          ? listData[widget.data.index].districtId == '0'
-                              ? "Pilih Kecamatan"
-                              : listData[widget.data.index].district
-                          : "Pilih Kecamatan",
-                      style: addAddressTextCategory,
-                    ),
-                    icon: const Icon(UniconsLine.angle_down),
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.deepPurple),
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
-                      setState(() {
-                        districtValue = value!;
-                        listData[widget.data.index].district =
-                            value.split("%")[1];
-                        listData[widget.data.index].districtId =
-                            value.split("%")[0];
-                        villageValue = null;
-                        getVillageBloc.add(GetDataVillageEvent(
-                            listData[widget.data.index].districtId));
-                      });
-                    },
-                    items: state.listDistrict.map((value) {
-                      return DropdownMenuItem(
-                        value: value.id.toString() + "%" + value.nama,
-                        child: Text(
-                          value.nama,
+                        isExpanded: true,
+                        value: districtValue,
+                        hint: Text(
+                          districtValue == null
+                              ? listData[widget.data.index].districtId == '0'
+                                  ? "Pilih Kecamatan"
+                                  : listData[widget.data.index].district
+                              : "Pilih Kecamatan",
                           style: addAddressTextCategory,
                         ),
-                      );
-                    }).toList(),
-                  ),
-                );
-              } else if (state is GetDataError) {
-                return Text(state.message.toString());
-              } else if (state is GetDataAddressInitial) {
-                return SizedBox();
-              } else {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: LoadingAnimationWidget.twistingDots(
-                      leftDotColor: const Color(0xFF1A1A3F),
-                      rightDotColor: const Color(0xFFEA3799),
-                      size: 35,
-                    ),
-                  ),
-                );
-              }
-            },
-          );
-
-    var villageAddress = listData.isEmpty ||
-            listData[widget.data.index].districtId == '0'
-        ? SizedBox()
-        : BlocBuilder<GetVillageAddressBloc, GetDataAddressState>(
-            builder: (context, state) {
-              if (state is GetVillageSuccess) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: _width,
-                  padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      border: Border.all(width: 0.5, color: Colors.grey),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 5,
-                          blurRadius: 10,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
+                        icon: const Icon(UniconsLine.angle_down),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        onChanged: (String? value) {
+                          // This is called when the user selects an item.
+                          setState(() {
+                            districtValue = value!;
+                            listData[widget.data.index].district =
+                                value.split("%")[1];
+                            listData[widget.data.index].districtId =
+                                value.split("%")[0];
+                            villageValue = null;
+                            getVillageBloc.add(GetDataVillageEvent(
+                                listData[widget.data.index].districtId));
+                          });
+                        },
+                        items: state.listDistrict.map((value) {
+                          return DropdownMenuItem(
+                            value: value.id.toString() + "%" + value.nama,
+                            child: Text(
+                              value.nama,
+                              style: addAddressTextCategory,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  } else if (state is GetDataError) {
+                    return Text(state.message.toString());
+                  } else if (state is GetDataAddressInitial) {
+                    return SizedBox();
+                  } else {
+                    return Center(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: LoadingAnimationWidget.twistingDots(
+                          leftDotColor: const Color(0xFF1A1A3F),
+                          rightDotColor: const Color(0xFFEA3799),
+                          size: 35,
                         ),
-                      ]),
-                  child: DropdownButton<String>(
-                    underline: Container(
-                      height: 0,
-                    ),
-                    isExpanded: true,
-                    value: villageValue,
-                    hint: Text(
-                      villageValue == null
-                          ? listData[widget.data.index].villageId == '0'
-                              ? "Pilih Kelurahan"
-                              : listData[widget.data.index].village
-                          : "Pilih Kelurahan",
-                      style: addAddressTextCategory,
-                    ),
-                    icon: const Icon(UniconsLine.angle_down),
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.deepPurple),
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
-                      setState(() {
-                        villageValue = value!;
-                        listData[widget.data.index].village =
-                            value.split("%")[1];
-                        listData[widget.data.index].villageId =
-                            value.split("%")[0];
-                      });
-                    },
-                    items: state.listVillage.map((value) {
-                      return DropdownMenuItem(
-                        value: value.id.toString() + '%' + value.nama,
-                        child: Text(
-                          value.nama,
+                      ),
+                    );
+                  }
+                },
+              );
+
+    villageAddress(double sizeWidth) =>
+        listData.isEmpty || listData[widget.data.index].districtId == '0'
+            ? SizedBox()
+            : BlocBuilder<GetVillageAddressBloc, GetDataAddressState>(
+                builder: (context, state) {
+                  if (state is GetVillageSuccess) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: _width / sizeWidth,
+                      padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          border: Border.all(width: 0.5, color: Colors.grey),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 5,
+                              blurRadius: 10,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ]),
+                      child: DropdownButton<String>(
+                        underline: Container(
+                          height: 0,
+                        ),
+                        isExpanded: true,
+                        value: villageValue,
+                        hint: Text(
+                          villageValue == null
+                              ? listData[widget.data.index].villageId == '0'
+                                  ? "Pilih Kelurahan"
+                                  : listData[widget.data.index].village
+                              : "Pilih Kelurahan",
                           style: addAddressTextCategory,
                         ),
-                      );
-                    }).toList(),
-                  ),
-                );
-              } else if (state is GetDataError) {
-                return Text(state.message.toString());
-              } else if (state is GetDataAddressInitial) {
-                return SizedBox();
-              } else {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: LoadingAnimationWidget.twistingDots(
-                      leftDotColor: const Color(0xFF1A1A3F),
-                      rightDotColor: const Color(0xFFEA3799),
-                      size: 35,
-                    ),
-                  ),
-                );
-              }
-            },
-          );
+                        icon: const Icon(UniconsLine.angle_down),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        onChanged: (String? value) {
+                          // This is called when the user selects an item.
+                          setState(() {
+                            villageValue = value!;
+                            listData[widget.data.index].village =
+                                value.split("%")[1];
+                            listData[widget.data.index].villageId =
+                                value.split("%")[0];
+                          });
+                        },
+                        items: state.listVillage.map((value) {
+                          return DropdownMenuItem(
+                            value: value.id.toString() + '%' + value.nama,
+                            child: Text(
+                              value.nama,
+                              style: addAddressTextCategory,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  } else if (state is GetDataError) {
+                    return Text(state.message.toString());
+                  } else if (state is GetDataAddressInitial) {
+                    return SizedBox();
+                  } else {
+                    return Center(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: LoadingAnimationWidget.twistingDots(
+                          leftDotColor: const Color(0xFF1A1A3F),
+                          rightDotColor: const Color(0xFFEA3799),
+                          size: 35,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
 
-    var postalCodeAddress = listData.isEmpty
+    postalCodeAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
             margin: EdgeInsets.only(bottom: 10),
-            width: _width / 2.5,
+            width: _width / sizeWidth,
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -609,11 +610,11 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var nameAddress = listData.isEmpty
+    nameAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
             margin: EdgeInsets.only(bottom: 10),
-            width: _width,
+            width: _width / sizeWidth,
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -642,10 +643,10 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var rtddress = listData.isEmpty
+    rtddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
-            width: _width / 4.5,
+            width: _width / sizeWidth,
             margin: EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
@@ -682,10 +683,10 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var rwAddress = listData.isEmpty
+    rwAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
-            width: _width / 4.5,
+            width: _width / sizeWidth,
             margin: EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
@@ -722,10 +723,10 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
 
-    var phoneAddress = listData.isEmpty
+    phoneAddress(double sizeWidth) => listData.isEmpty
         ? SizedBox()
         : Container(
-            width: _width,
+            width: _width / sizeWidth,
             padding: const EdgeInsets.fromLTRB(15, 3, 15, 3),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -813,133 +814,230 @@ class _EditAddressBlocState extends State<EditAddressBloc> {
             ),
           );
         } else {
-          return InkWell(
-            onTap: () {
-              if (listData[widget.data.index].cityId == "0" ||
-                  listData[widget.data.index].districtId == "0" ||
-                  listData[widget.data.index].villageId == "0" ||
-                  listData[widget.data.index].rt == "" ||
-                  listData[widget.data.index].rw == "" ||
-                  listData[widget.data.index].phoneNumber == "") {
-                final snackBar = SnackBar(
-                  content: const Text('Lengkapi Data!'),
-                  action: SnackBarAction(
-                    label: 'OK',
-                    textColor: Colors.red,
-                    onPressed: () {
-                      // Some code to undo the change.
-                    },
-                  ),
-                );
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              } else {
-                context.read<AddressCubitCubit>().updateDataToLocal(listData);
-              }
-            },
-            child: Container(
-                width: _width,
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.black87,
-                    border: Border.all(width: 0.5, color: Colors.grey),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+          return ResponsiveBuilder(builder: (context, sizingInformation) {
+            return SizedBox(
+              width: sizingInformation.deviceScreenType ==
+                          DeviceScreenType.mobile ||
+                      sizingInformation.deviceScreenType ==
+                          DeviceScreenType.tablet
+                  ? _width / 1.07
+                  : _width / 5,
+              child: InkWell(
+                onTap: () {
+                  if (listData[widget.data.index].cityId == "0" ||
+                      listData[widget.data.index].districtId == "0" ||
+                      listData[widget.data.index].villageId == "0" ||
+                      listData[widget.data.index].rt == "" ||
+                      listData[widget.data.index].rw == "" ||
+                      listData[widget.data.index].phoneNumber == "") {
+                    final snackBar = SnackBar(
+                      content: const Text('Lengkapi Data!'),
+                      action: SnackBarAction(
+                        label: 'OK',
+                        textColor: Colors.red,
+                        onPressed: () {
+                          // Some code to undo the change.
+                        },
                       ),
-                    ]),
-                child: Center(
-                  child: Text(
-                    "Simpan Perubahan",
-                    style: addAddressTextButton,
-                  ),
-                )),
-          );
+                    );
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    context
+                        .read<AddressCubitCubit>()
+                        .updateDataToLocal(listData);
+                  }
+                },
+                child: Container(
+                    width: _width,
+                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.black87,
+                        border: Border.all(width: 0.5, color: Colors.grey),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 10,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ]),
+                    child: Center(
+                      child: Text(
+                        "Simpan Perubahan",
+                        style: addAddressTextButton,
+                      ),
+                    )),
+              ),
+            );
+          });
         }
       },
     );
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: bgColor,
-        body: BlocListener<AddressCubitCubit, AddressCubitState>(
-          listener: (context, state) {
-            // TODO: implement listener
-            if (state is LocalDataSuccess) {
-              setState(() {
-                listData = state.listData;
-              });
-            } else if (state is SuccessChangeData) {
-              Navigator.pushNamed(context, '/');
-            } else {
-              setState(() {
-                listData = [];
-              });
-            }
-          },
-          child: BlocBuilder<AddressCubitCubit, AddressCubitState>(
-            builder: (context, state) {
+    return ResponsiveBuilder(builder: (context, sizeInformation) {
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: bgColor,
+          body: BlocListener<AddressCubitCubit, AddressCubitState>(
+            listener: (context, state) {
+              // TODO: implement listener
               if (state is LocalDataSuccess) {
-                return Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin:
-                              EdgeInsets.only(bottom: 20, left: 12, right: 12),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Ubah Alamat",
-                                style: homeTitleTextStyle,
-                              )
-                            ],
-                          ),
-                        ),
-                        categoryAddress,
-                        countryAddress,
-                        provinceAddress,
-                        cityAddress,
-                        districtAddress,
-                        villageAddress,
-                        nameAddress,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [postalCodeAddress, rtddress, rwAddress],
-                        ),
-                        phoneAddress,
-                        activeStatusAddress,
-                        addAddressButton,
-                        SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                setState(() {
+                  listData = state.listData;
+                });
+              } else if (state is SuccessChangeData) {
+                Navigator.pushNamed(context, '/');
               } else {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: LoadingAnimationWidget.twistingDots(
-                      leftDotColor: const Color(0xFF1A1A3F),
-                      rightDotColor: const Color(0xFFEA3799),
-                      size: 35,
-                    ),
-                  ),
-                );
+                setState(() {
+                  listData = [];
+                });
               }
             },
+            child: BlocBuilder<AddressCubitCubit, AddressCubitState>(
+              builder: (context, state) {
+                if (state is LocalDataSuccess) {
+                  return Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                                bottom: 20, left: 12, right: 12),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Tambah Alamat",
+                                  style: homeTitleTextStyle,
+                                )
+                              ],
+                            ),
+                          ),
+                          sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.mobile ||
+                                  sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.tablet
+                              ? Column(
+                                  children: [
+                                    categoryAddress(1),
+                                    countryAddress(1),
+                                    provinceAddress(1),
+                                  ],
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    categoryAddress(3.8),
+                                    countryAddress(3.8),
+                                    provinceAddress(2.5),
+                                  ],
+                                ),
+                          sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.mobile ||
+                                  sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.tablet
+                              ? Column(
+                                  children: [
+                                    cityAddress(1),
+                                    districtAddress(1),
+                                    villageAddress(1),
+                                    nameAddress(1)
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    cityAddress(3.8),
+                                    districtAddress(3.8),
+                                    villageAddress(2.5),
+                                  ],
+                                ),
+
+                          sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.mobile ||
+                                  sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.tablet
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    postalCodeAddress(2.5),
+                                    rtddress(4.5),
+                                    rwAddress(4.5),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    postalCodeAddress(4),
+                                    rtddress(6),
+                                    rwAddress(6),
+                                    phoneAddress(3)
+                                  ],
+                                ),
+                          // phoneAddress,
+                          sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.mobile ||
+                                  sizeInformation.deviceScreenType ==
+                                      DeviceScreenType.tablet
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    phoneAddress(1.035),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    nameAddress(2),
+                                  ],
+                                ),
+                          activeStatusAddress,
+                          Row(
+                            mainAxisAlignment:
+                                sizeInformation.deviceScreenType ==
+                                            DeviceScreenType.tablet ||
+                                        sizeInformation.deviceScreenType ==
+                                            DeviceScreenType.tablet
+                                    ? MainAxisAlignment.center
+                                    : MainAxisAlignment.start,
+                            children: [
+                              addAddressButton,
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: LoadingAnimationWidget.twistingDots(
+                        leftDotColor: const Color(0xFF1A1A3F),
+                        rightDotColor: const Color(0xFFEA3799),
+                        size: 35,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

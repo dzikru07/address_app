@@ -37,6 +37,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   google_fonts: ^4.0.3
   loading_animation_widget: ^1.2.0+4
+  responsive_builder: ^0.6.4
   shared_preferences: ^2.1.0
   unicons: ^2.1.1
 
